@@ -1,0 +1,72 @@
+4484 INFO: Loading module hook 'hook-sqlite3.py' from '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks'...
+5038 INFO: Loading module hook 'hook-difflib.py' from '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks'...
+5194 INFO: Processing module hooks...
+5241 INFO: Performing binary vs. data reclassification (7 entries)
+5246 INFO: Looking for ctypes DLLs
+5309 INFO: Analyzing run-time hooks ...
+5310 INFO: Including run-time hook '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks/pyi_rth_inspect.py'
+5311 INFO: Including run-time hook '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks/pyi_rth_pkgutil.py'
+5312 INFO: Processing pre-find module path hook _pyi_rth_utils from '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks/pre_find_module_path/hook-_pyi_rth_utils.py'.
+5313 INFO: Loading module hook 'hook-_pyi_rth_utils.py' from '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks'...
+5314 INFO: Including run-time hook '/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/hooks/rthooks/pyi_rth_multiprocessing.py'
+5319 INFO: Looking for dynamic libraries
+5477 INFO: Warnings written to /Users/ec2-user/ATLAS/ATLAS-ARM64/build/ATLAS-ARM64/warn-ATLAS-ARM64.txt
+5493 INFO: Graph cross-reference written to /Users/ec2-user/ATLAS/ATLAS-ARM64/build/ATLAS-ARM64/xref-ATLAS-ARM64.html
+5540 INFO: checking PYZ
+5540 INFO: Building PYZ because PYZ-00.toc is non existent
+5540 INFO: Building PYZ (ZlibArchive) /Users/ec2-user/ATLAS/ATLAS-ARM64/build/ATLAS-ARM64/PYZ-00.pyz
+5950 INFO: Building PYZ (ZlibArchive) /Users/ec2-user/ATLAS/ATLAS-ARM64/build/ATLAS-ARM64/PYZ-00.pyz completed successfully.
+5955 INFO: EXE target arch: arm64
+5955 INFO: Code signing identity: None
+5956 INFO: checking PKG
+5956 INFO: Building PKG because PKG-00.toc is non existent
+5956 INFO: Building PKG (CArchive) ATLAS-ARM64.pkg
+10094 INFO: Building PKG (CArchive) ATLAS-ARM64.pkg completed successfully.
+10097 INFO: Bootloader /Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/bootloader/Darwin-64bit/runw
+10097 INFO: checking EXE
+10097 INFO: Building EXE because EXE-00.toc is non existent
+10097 INFO: Building EXE from EXE-00.toc
+10097 INFO: Copying bootloader EXE to /Users/ec2-user/ATLAS/ATLAS-ARM64/dist/ATLAS-ARM64
+10099 INFO: Converting EXE to target arch (arm64)
+10115 INFO: Removing signature(s) from EXE
+10130 INFO: Appending PKG archive to EXE
+10147 INFO: Fixing EXE headers for code signing
+10150 INFO: Re-signing the EXE
+10195 INFO: Building EXE from EXE-00.toc completed successfully.
+10197 INFO: checking BUNDLE
+10197 INFO: Building BUNDLE because BUNDLE-00.toc is non existent
+10197 INFO: Building BUNDLE BUNDLE-00.toc
+Traceback (most recent call last):
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/icon.py", line 50, in normalize_icon_type
+    from PIL import Image as PILImage
+ModuleNotFoundError: No module named 'PIL'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/bin/pyinstaller", line 6, in <module>
+    sys.exit(_console_script_run())
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/__main__.py", line 214, in _console_script_run
+    run()
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/__main__.py", line 198, in run
+    run_build(pyi_config, spec_file, **vars(args))
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/__main__.py", line 69, in run_build
+    PyInstaller.building.build_main.main(pyi_config, spec_file, **kwargs)
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/build_main.py", line 1071, in main
+    build(specfile, distpath, workpath, clean_build)
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/build_main.py", line 1011, in build
+    exec(code, spec_namespace)
+  File "ATLAS-ARM64.spec", line 40, in <module>
+    app = BUNDLE(
+          ^^^^^^^
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/osx.py", line 121, in __init__
+    self.__postinit__()
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/datastruct.py", line 184, in __postinit__
+    self.assemble()
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/osx.py", line 552, in assemble
+    self.icon = normalize_icon_type(self.icon, ("icns",), "icns", CONF["workpath"])
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/icon.py", line 54, in normalize_icon_type
+    raise ValueError(
+ValueError: Received icon image '/Users/ec2-user/ATLAS/ATLAS-ARM64/AwsSsoSsmDashboardTool.dmg' which exists but is not in the correct format. On this platform, only ('icns',) images may be used as icons. If Pillow is installed, automatic conversion will be attempted. Please install Pillow or convert your 'dmg' file to one of ('icns',) and try again
