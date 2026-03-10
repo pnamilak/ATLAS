@@ -1,0 +1,21 @@
+# Go to home directory
+cd ~
+
+# Download Python 3.11 universal macOS installer
+curl -O https://www.python.org/ftp/python/3.11.9/python-3.11.9-macos11.pkg
+
+# Install it using macOS installer
+sudo installer -pkg python-3.11.9-macos11.pkg -target /
+
+# Verify installation
+/Library/Frameworks/Python.framework/Versions/3.11/bin/python3 --version
+
+
+echo 'export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"' >> ~/.zprofile
+source ~/.zprofile
+
+
+python3 --version
+
+
+file /Library/Frameworks/Python.framework/Versions/3.11/bin/python3
