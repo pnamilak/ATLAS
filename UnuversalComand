@@ -1,0 +1,92 @@
+cd ~/ATLAS
+cp -R ATLAS-ARM64 ATLAS-UNIVERSAL
+cd ATLAS-UNIVERSAL
+
+/Library/Frameworks/Python.framework/Versions/3.11/bin/python3 -m venv venv
+source venv/bin/activate
+
+python -m pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+pip install pyinstaller==6.3.0 pillow
+
+cat > ATLAS-UNIVERSAL.spec <<'PYEOF'
+# -*- mode: python ; coding: utf-8 -*-
+
+from PyInstaller.utils.hooks import collect_submodules
+
+hiddenimports = collect_submodules('boto3') + collect_submodules('botocore')
+
+a = Analysis(
+    ['launcher_desktop.py'],
+    pathex=[],
+    binaries=[],
+    datas=[
+        ('app/templates', 'app/templates'),
+        ('app/static', 'app/static'),
+        ('schema.sql', '.'),
+        ('ATLAS.icns', '.'),
+    ],
+    hiddenimports=hiddenimports,
+    hookspath=[],
+    hooksconfig={},
+    runtime_hooks=[],
+    excludes=[],
+    noarchive=False,
+)
+
+pyz = PYZ(a.pure)
+
+exe = EXE(
+    pyz,
+    a.scripts,
+    a.binaries,
+    a.datas,
+    [],
+    name='ATLAS',
+    debug=False,
+    bootloader_ignore_signals=False,
+    strip=False,
+    upx=False,
+    console=False,
+    target_arch='universal2',
+)
+
+app = BUNDLE(
+    exe,
+    name='ATLAS.app',
+    icon='ATLAS.icns',
+    bundle_identifier='com.company.atlas',
+    info_plist={
+        'CFBundleName': 'ATLAS',
+        'CFBundleDisplayName': 'ATLAS - AWS Trusted Login & Access Service',
+        'CFBundleShortVersionString': '1.0.0',
+        'CFBundleVersion': '1.0.0',
+        'NSHighResolutionCapable': True,
+    },
+)
+PYEOF
+
+rm -rf build dist
+pyinstaller --clean --noconfirm ATLAS-UNIVERSAL.spec
+
+file dist/ATLAS.app/Contents/MacOS/ATLAS
+lipo -info dist/ATLAS.app/Contents/MacOS/ATLAS
+
+open dist/ATLAS.app
+
+cd dist
+ditto -c -k --sequesterRsrc --keepParent "ATLAS.app" "ATLAS-universal-mac.zip"
+
+brew install create-dmg
+rm -f ATLAS-universal-mac.dmg
+
+create-dmg \
+  --volname "ATLAS" \
+  --window-pos 200 120 \
+  --window-size 800 420 \
+  --icon-size 120 \
+  --icon "ATLAS.app" 200 190 \
+  --hide-extension "ATLAS.app" \
+  --app-drop-link 600 185 \
+  "ATLAS-universal-mac.dmg" \
+  "ATLAS.app"
