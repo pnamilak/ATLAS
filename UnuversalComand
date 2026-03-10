@@ -1,3 +1,32 @@
+cd ~/ATLAS/ATLAS-UNIVERSAL
+python3 -m venv venv
+source venv/bin/activate
+which python
+python -m pip install --upgrade pip setuptools wheel
+pip install -r requirements.txt
+pip install pyinstaller==6.3.0 pillow
+rm -rf build dist
+pyinstaller --clean --noconfirm ATLAS-UNIVERSAL.spec
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 cd ~/ATLAS
 cp -R ATLAS-ARM64 ATLAS-UNIVERSAL
 cd ATLAS-UNIVERSAL
