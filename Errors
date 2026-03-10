@@ -1,1 +1,16 @@
-
+staller/building/api.py", line 609, in __init__
+    self.pkg = PKG(
+               ^^^^
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/api.py", line 238, in __init__
+    self.__postinit__()
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/datastruct.py", line 184, in __postinit__
+    self.assemble()
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/api.py", line 289, in assemble
+    src_name = process_collected_binary(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/building/utils.py", line 272, in process_collected_binary
+    osxutils.binary_to_target_arch(cached_name, target_arch, display_name=src_name)
+  File "/Users/ec2-user/ATLAS/ATLAS-ARM64/venv/lib/python3.11/site-packages/PyInstaller/utils/osx.py", line 339, in binary_to_target_arch
+    raise IncompatibleBinaryArchError(f"{display_name} is not a fat binary!")
+PyInstaller.utils.osx.IncompatibleBinaryArchError: /opt/homebrew/Cellar/python@3.11/3.11.14_3/Frameworks/Python.framework/Versions/3.11/lib/python3.11/lib-dynload/_struct.cpython-311-darwin.so is not a fat binary!
+(venv) ec2-user@ip-172-25-22-105 ATLAS-UNIVERSAL % 
