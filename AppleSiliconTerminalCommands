@@ -1,1 +1,12 @@
+cd dist
 
+create-dmg \
+  --volname "ATLAS" \
+  --window-pos 200 120 \
+  --window-size 800 420 \
+  --icon-size 120 \
+  --icon "ATLAS-ARM64.app" 200 190 \
+  --hide-extension "ATLAS-ARM64.app" \
+  --app-drop-link 600 185 \
+  "ATLAS-ARM64.dmg" \
+  "ATLAS-ARM64.app"
