@@ -1,108 +1,63 @@
 #!/bin/bash
 set -e
 
-echo "============================================================"
-echo "ATLAS Mac Python 3.11 reset + clean reinstall"
-echo "============================================================"
+echo "=================================================="
+echo "Fixing ATLAS universal build environment"
+echo "=================================================="
 
-echo ""
-echo "[1/10] Show current python commands"
-which python3 || true
-which python || true
-python3 --version || true
-python --version || true
+# 1) Go to project root
+cd ~/ATLAS
 
-echo ""
-echo "[2/10] Remove old project virtual environments"
-rm -rf ~/ATLAS/ATLAS-ARM64/venv || true
-rm -rf ~/ATLAS/ATLAS-X64/venv || true
-rm -rf ~/ATLAS/ATLAS-UNIVERSAL/venv || true
+# 2) Remove only the bad universal venv and old build output
+rm -rf ~/ATLAS/ATLAS-UNIVERSAL/venv
+rm -rf ~/ATLAS/ATLAS-UNIVERSAL/build
+rm -rf ~/ATLAS/ATLAS-UNIVERSAL/dist
 
-echo ""
-echo "[3/10] Remove old build folders"
-rm -rf ~/ATLAS/ATLAS-ARM64/build ~/ATLAS/ATLAS-ARM64/dist || true
-rm -rf ~/ATLAS/ATLAS-X64/build ~/ATLAS/ATLAS-X64/dist || true
-rm -rf ~/ATLAS/ATLAS-UNIVERSAL/build ~/ATLAS/ATLAS-UNIVERSAL/dist || true
+# 3) Make sure old shell command cache is cleared
+hash -r || true
 
-echo ""
-echo "[4/10] Uninstall Homebrew python@3.11 if present"
-if command -v brew >/dev/null 2>&1; then
-  brew uninstall --ignore-dependencies python@3.11 || true
-  brew cleanup || true
-else
-  echo "Homebrew not found, skipping brew uninstall"
-fi
+# 4) Force python.org Python 3.11 to the front of PATH
+export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 
-echo ""
-echo "[5/10] Remove python.org Python 3.11 framework install if present"
-sudo rm -rf /Library/Frameworks/Python.framework/Versions/3.11 || true
-sudo rm -f /usr/local/bin/python3.11 || true
-sudo rm -f /usr/local/bin/pip3.11 || true
-sudo rm -f /usr/local/bin/idle3.11 || true
-sudo rm -f /usr/local/bin/pydoc3.11 || true
-sudo rm -f /usr/local/bin/2to3-3.11 || true
-
-echo ""
-echo "[6/10] Clean old PATH entries from shell profiles"
-for f in ~/.zprofile ~/.zshrc ~/.bash_profile ~/.bashrc; do
-  if [ -f "$f" ]; then
-    cp "$f" "$f.bak_atlas_python_reset"
-    python3 - <<PY
-from pathlib import Path
-p = Path("$f")
-text = p.read_text()
-lines = text.splitlines()
-filtered = []
-for line in lines:
-    s = line.strip()
-    if '/Library/Frameworks/Python.framework/Versions/3.11/bin' in s:
-        continue
-    if '/opt/homebrew/bin' in s and 'python' in s.lower():
-        continue
-    filtered.append(line)
-p.write_text("\n".join(filtered) + ("\n" if filtered else ""))
-print("Cleaned:", p)
-PY
-  fi
-done
-
-echo ""
-echo "[7/10] Download official python.org Python 3.11 installer"
-cd ~
-rm -f python-3.11.9-macos11.pkg
-curl -L -o python-3.11.9-macos11.pkg https://www.python.org/ftp/python/3.11.9/python-3.11.9-macos11.pkg
-
-echo ""
-echo "[8/10] Install official python.org Python 3.11"
-sudo installer -pkg ~/python-3.11.9-macos11.pkg -target /
-
-echo ""
-echo "[9/10] Add python.org Python 3.11 to PATH"
-touch ~/.zprofile
-grep -q '/Library/Frameworks/Python.framework/Versions/3.11/bin' ~/.zprofile || \
-echo 'export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"' >> ~/.zprofile
-
-export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:$PATH"
-hash -r
-
-echo ""
-echo "[10/10] Verify clean install"
+# 5) Verify we are NOT using Homebrew Python
 which python3
 python3 --version
-file /Library/Frameworks/Python.framework/Versions/3.11/bin/python3 || true
+file /Library/Frameworks/Python.framework/Versions/3.11/bin/python3
 
-echo ""
-echo "============================================================"
-echo "Python reset complete"
-echo "============================================================"
-echo ""
-echo "Next commands to prepare ATLAS-UNIVERSAL:"
-echo "cd ~/ATLAS/ATLAS-UNIVERSAL"
-echo "python3 -m venv venv"
-echo "source venv/bin/activate"
-echo "which python"
-echo "python -m pip install --upgrade pip setuptools wheel"
-echo "pip install -r requirements.txt"
-echo "pip install pyinstaller==6.3.0 pillow"
-echo "rm -rf build dist"
-echo "pyinstaller --clean --noconfirm ATLAS-UNIVERSAL.spec"
+# 6) Go into universal folder
+cd ~/ATLAS/ATLAS-UNIVERSAL
+
+# 7) Create fresh venv using python.org Python explicitly
+/Library/Frameworks/Python.framework/Versions/3.11/bin/python3 -m venv venv
+
+# 8) Activate it
+source venv/bin/activate
+
+# 9) Verify this venv is the one being used
+echo "python => $(which python)"
+echo "pip    => $(which pip)"
+python -c "import sys; print(sys.executable)"
+pip -V
+
+# 10) Upgrade packaging tools
+python -m pip install --upgrade pip setuptools wheel
+
+# 11) Install dependencies INSIDE this venv
+python -m pip install -r requirements.txt
+python -m pip install pyinstaller==6.3.0 pillow
+
+# 12) Double-check PyInstaller and Python paths
+echo "pyinstaller => $(which pyinstaller)"
+pyinstaller --version
+python -c "import sys; print('PYTHON EXE:', sys.executable)"
+python -c "import struct; print(struct.__file__)"
+
+# 13) Clean build again
+rm -rf build dist
+
+# 14) Run universal build
+pyinstaller --clean --noconfirm ATLAS-UNIVERSAL.spec
+
+# 15) Verify universal app
+file dist/ATLAS.app/Contents/MacOS/ATLAS
+lipo -info dist/ATLAS.app/Contents/MacOS/ATLAS
